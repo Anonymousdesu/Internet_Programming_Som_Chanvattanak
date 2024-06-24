@@ -14,22 +14,18 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->bigInteger('category_id')->unsigned();
             $table->double('pricing');
-            $table->double('discount')->nullable();
-            $table->string('tags')->nullable();
-            $table->timestamp('promotion_date')->nullable();
-            $table->string('color');
-            $table->integer('rating')->default(0);
-            $table->integer('purchased_number')->default(0);
-            $table->string('size');
-            $table->string('brand');
-            $table->string('style')->nullable();
-            $table->string('model')->nullable();
-            $table->string('shipping')->nullable();
-            $table->string('missing');
+            $table->string('specail_offer')->nullable();
+            $table->string('tag_color')->nullable();
+            $table->double('discount_pricing')->nullable()->default(0);
+            $table->text('description')->nullable();
+            $table->integer('rating')->nullable()->default(0);
+            $table->integer('weight')->nullable()->default(0);
+            $table->text('image')->nullable();
+
             $table->timestamps();
 
-            $table->bigInteger('category_id')->unsigned();
             $table->foreign('category_id')->references('id')->on('categories');
         });
     }

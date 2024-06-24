@@ -1,7 +1,9 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/welcome', function () {
     return view('welcome');
 });
 
@@ -23,9 +25,21 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile', [ProfileController::class, 'edit'])      ->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])  ->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::middleware('auth:api')->get('/user', function(Request $request){
+    return $request->user();
+});
+
 require __DIR__.'/auth.php';
+
+Route::controller(HomeController::class)->group(function(){
+    Route::get('/',"renderHome")            ->name("home");
+    Route::get('/product/add',"add")        ->name("product.goToCreate");
+    Route::get('/product/edit/{id}',"edit") ->name("product.goToEdit");
+    Route::post('/product/store',"store")   ->name("product.create");
+});
+
